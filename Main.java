@@ -1,90 +1,67 @@
-import java.util.ArrayList;
-import java.util.List;
-
-// Class to represent a Course
 class Course {
-    private String courseName;
-    private int marks;
+    String courseName;
+    int marks;
 
+    // Constructor to initialize course name and marks
     public Course(String courseName, int marks) {
         this.courseName = courseName;
         this.marks = marks;
     }
 
-    public String getCourseName() {
-        return courseName;
+    // Method to check if marks are less than 40
+    public boolean isFailing() {
+        return marks < 40;
     }
 
-    public int getMarks() {
-        return marks;
+    // Method to display course information
+    public void displayCourse() {
+        System.out.println(courseName + " - Marks: " + marks);
     }
 }
 
-// Class to represent a Student
 class Student {
-    private String name;
-    private List<Course> courses;
+    String name;
+    Course[] courses; // Array to store courses
 
-    public Student(String name) {
+    // Constructor to initialize student name and courses
+    public Student(String name, Course[] courses) {
         this.name = name;
-        this.courses = new ArrayList<>();
+        this.courses = courses;
     }
 
-    // Add a course to the student's list
-    public void addCourse(Course course) {
-        courses.add(course);
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public List<Course> getCourses() {
-        return courses;
-    }
-
-    // Display all course marks
-    public void displayCourseMarks() {
-        System.out.println("Marks for " + name + ":");
+    // Method to display student details and failing courses
+    public void displayFailingCourses() {
+        System.out.println("Student: " + name);
+        boolean hasFailingCourses = false;
         for (Course course : courses) {
-            System.out.println(course.getCourseName() + ": " + course.getMarks());
-        }
-    }
-
-    // Display courses where marks are below 40
-    public void displayCoursesWithLowMarks() {
-        System.out.println("Courses where " + name + " scored less than 40:");
-        for (Course course : courses) {
-            if (course.getMarks() < 40) {
-                System.out.println(course.getCourseName() + ": " + course.getMarks());
+            if (course.isFailing()) {
+                if (!hasFailingCourses) {
+                    System.out.println("Courses with marks less than 40:");
+                    hasFailingCourses = true;
+                }
+                course.displayCourse();
             }
         }
+        if (!hasFailingCourses) {
+            System.out.println("No courses with marks less than 40.");
+        }
     }
 }
 
-// Main class to test the functionality
 public class Main {
     public static void main(String[] args) {
-        // Create a student
-        Student student = new Student("Alice");
+        // Create courses with course name and marks
+        Course course1 = new Course("Math", 35);
+        Course course2 = new Course("Science", 45);
+        Course course3 = new Course("History", 39);
 
-        // Add courses and marks
-        student.addCourse(new Course("Math", 85));
-        student.addCourse(new Course("Physics", 38));
-        student.addCourse(new Course("Chemistry", 75));
-        student.addCourse(new Course("Biology", 33));
+        // Create an array of courses
+        Course[] courses = {course1, course2, course3};
 
-        // Retrieve student name and registered courses
-        System.out.println("Student Name: " + student.getName());
-        System.out.println("Registered Courses:");
-        for (Course c : student.getCourses()) {
-            System.out.println("- " + c.getCourseName());
-        }
+        // Create a student and assign courses
+        Student student = new Student("John Doe", courses);
 
-        // Retrieve marks for each course
-        student.displayCourseMarks();
-
-        // Show courses with marks less than 40
-        student.displayCoursesWithLowMarks();
+        // Display courses where the student scored less than 40
+        student.displayFailingCourses();
     }
 }
